@@ -1,44 +1,59 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 import axios from "axios";
+import { useEffect } from "react";
 
 const CreateUser = () => {
-    const [name, setName] = useState("");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [conpassword, consetPassword] = useState("");
-    const [email, setEmail] = useState("");
-    const navigate = useNavigate(); 
-    async function handleSubmit(e){
-        e.preventDefault();
-        if(!(password==conpassword)){
-            alert("Please fill the form again.Password are not matching")
-        }
-        const newUser = {
-          name,
-          username,
-          password,
-          email,
-        };
-        axios
-          .post("http://localhost:3000/users", newUser)
-          .then((response) => {
-            if (response.data.success) {
-              alert(response.data.message);
-              navigate('/admin')
-            } else {
-              alert(response.data.message);
-            }
-          })
-    
-          .catch((error) => {
-            console.log(error.message);
-            // enqueueSnackbar("Coundnt login", { variant: "success" });
-          });
-     
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [conpassword, consetPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+
+  //checks weather session is over or not
+  useEffect(() => {
+    if (!localStorage.getItem("auth-token")) {
+      navigate("/");
     }
+  }, []);
+
+  //used to create user
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (!(password == conpassword)) {
+      alert("Please fill the form again.Password are not matching");
+      window.location.reload();
+      return;
+    }
+    const newUser = {
+      name,
+      username,
+      password,
+      email,
+    };
+    axios
+      .post("http://localhost:3000/users", newUser)
+      .then((response) => {
+        if (response.data.success) {
+          alert(response.data.message);
+          navigate("/admin");
+        } else {
+          alert(response.data.message);
+          navigate("/createUser");
+        }
+      })
+
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }
   return (
     <>
+      <div className="p-4 w-100">
+        <Navbar />
+      </div>
       <form class="max-w-md mx-auto" onSubmit={handleSubmit}>
         <div class="relative z-0 w-full mb-5 group">
           <input
@@ -58,7 +73,7 @@ const CreateUser = () => {
         </div>
         <div class="relative z-0 w-full mb-5 group">
           <input
-            type="password"
+            type="text"
             name="repeat_password"
             id="floating_repeat_password"
             class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -123,7 +138,7 @@ const CreateUser = () => {
 
         <button
           type="submit"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          class="text-black bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Submit
         </button>

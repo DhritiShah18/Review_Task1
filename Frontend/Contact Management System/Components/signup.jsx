@@ -8,8 +8,9 @@ const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const navigate = useNavigate();  
-  const handleLogin = async (e) => {   
+  const navigate = useNavigate();
+
+  const handleSignUp = async (e) => {
     e.preventDefault();
     const signup = {
       name,
@@ -22,22 +23,26 @@ const SignUp = () => {
       .then((response) => {
         if (response.data.success) {
           alert(response.data.message);
-          navigate('/')
+          navigate("/");
         } else {
           alert(response.data.message);
+          navigate("/signup");
         }
       })
 
       .catch((error) => {
         console.log(error.message);
+        navigate("/signup");
         // enqueueSnackbar("Coundnt login", { variant: "success" });
       });
   };
   return (
     <div className="flex items-center justify-center  bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-2xl">
-        <h2 className="text-2xl font-bold text-center text-gray-700">Sign Up</h2>
-        <form className="space-y-4" onSubmit={handleLogin}>
+        <h2 className="text-2xl font-bold text-center text-gray-700">
+          Sign Up
+        </h2>
+        <form className="space-y-4" onSubmit={handleSignUp}>
           <div>
             <label className="block text-gray-600">Name</label>
             <input
@@ -76,7 +81,7 @@ const SignUp = () => {
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
+            className="w-full px-4 py-2 text-black bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-300"
           >
             Sign up
           </button>

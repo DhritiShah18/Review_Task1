@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import Navbar from "../Components/Navbar";
 
 const CreateContact = () => {
   // State for form fields
@@ -15,6 +18,14 @@ const CreateContact = () => {
     jobTitle: "",
     website: "",
   });
+  const navigate=useNavigate()
+
+  useEffect(() => {
+    if (!localStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+    
+  }, []);
 
   // Handle input change
   const handleChange = (e) => {
@@ -34,8 +45,10 @@ const CreateContact = () => {
         try{
           if (response.data.success) {
             alert(response.data.message);
+            navigate('/admin')
           } else {
             alert(response.data.message);
+            // navigate('/ManageUser')
           }
         }
           catch (error) {
@@ -51,13 +64,15 @@ const CreateContact = () => {
         
 
   return (
+    <>
+    <Navbar/>
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold text-center mb-6">
           Create Contact
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
+          
           <div>
             <label className="block text-gray-700 font-medium">
               Full Name *
@@ -72,7 +87,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Phone Number */}
+         
           <div>
             <label className="block text-gray-700 font-medium">
               Phone Number *
@@ -87,7 +102,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Email */}
+       
           <div>
             <label className="block text-gray-700 font-medium">Email *</label>
             <input
@@ -100,7 +115,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Nickname */}
+        
           <div>
             <label className="block text-gray-700 font-medium">Nickname</label>
             <input
@@ -112,7 +127,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Address */}
+         
           <div>
             <label className="block text-gray-700 font-medium">Address</label>
             <textarea
@@ -123,7 +138,7 @@ const CreateContact = () => {
             ></textarea>
           </div>
 
-          {/* Relationship */}
+         
           <div>
             <label className="block text-gray-700 font-medium">
               Relationship
@@ -142,7 +157,7 @@ const CreateContact = () => {
             </select>
           </div>
 
-          {/* Company */}
+         
           <div>
             <label className="block text-gray-700 font-medium">Company</label>
             <input
@@ -154,7 +169,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Job Title */}
+        
           <div>
             <label className="block text-gray-700 font-medium">Job Title</label>
             <input
@@ -166,7 +181,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Website */}
+         
           <div>
             <label className="block text-gray-700 font-medium">Website</label>
             <input
@@ -178,7 +193,7 @@ const CreateContact = () => {
             />
           </div>
 
-          {/* Notes */}
+        
           <div>
             <label className="block text-gray-700 font-medium">Notes</label>
             <textarea
@@ -189,16 +204,17 @@ const CreateContact = () => {
             ></textarea>
           </div>
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
+            className="w-full bg-blue-500 text-black py-2 rounded-md hover:bg-blue-600 transition"
           >
             Save Contact
           </button>
         </form>
       </div>
     </div>
+    </>
   );
 };
 

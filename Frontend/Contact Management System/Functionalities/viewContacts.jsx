@@ -2,24 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
 
 const UserContacts = () => {
-  const { id } = useParams();
+  let { id } = useParams();
+
+  // console.log(id)
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
+const navigate=useNavigate()
+
+  useEffect(() => {
+    if (!localStorage.getItem("auth-token")) {
+      navigate("/");
+    }
+    
+  }, []);
 
   useEffect(() => {
     // console.log(id)
     axios
-    .get(`http://localhost:3000/Contact?q=${id}`)
+    .get(`http://localhost:3000/Contact/${id}`)
     .then((response) => {
       // Assuming the response data is an array
-      if (Array.isArray(response.data)) {
+      if ((response.data)) {
         setContacts(response.data);
       } else {
         alert("Expected an array but got", response.data.message);
       }
-    })
+    })  
     .catch((err) => console.error("Error fetching contacts:", err.message));
 }, [id]);
 
@@ -32,6 +44,7 @@ const UserContacts = () => {
     .then((response)=>{
         if(response.data.success){
             alert(response.data.message)
+            navigate('/seecontacts/:id')
             window.location.reload()
         }
         else{
@@ -47,10 +60,11 @@ const UserContacts = () => {
   const handleUpdateContact = (e) => {
     e.preventDefault();
     axios
-      .put(`http://localhost:3000/Contact/${selectedUser._id}`, selectedUser)
+      .put(`http://localhost:3000/Contact/${selectedContact._id}`, setSelectedContact)
       .then((response) => {
         if (response.data.success) {
           alert(response.data.message);
+          navigate('/seecontacts/:id')
         } else {
           alert(response.data.message);
         }
@@ -61,6 +75,8 @@ const UserContacts = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen p-6 bg-gray-100">
       <h2 className="text-2xl font-semibold mb-4">User Contacts</h2>
       <table className="w-full bg-white shadow-lg rounded-lg">
@@ -114,9 +130,67 @@ const UserContacts = () => {
                 }
                 className="w-full p-2 border rounded-md mb-3"
               />
+               <input
+                type="text"
+                value={selectedContact.phone}
+                onChange={(e) =>
+                  setSelectedContact({
+                    ...selectedContact,
+                    phone: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md mb-3"
+              />
+                <input
+                type="text"
+                value={selectedContact.email}
+                onChange={(e) =>
+                  setSelectedContact({
+                    ...selectedContact,
+                    email: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md mb-3"
+              />
+               <input
+                type="text"
+                value={selectedContact.Nickname}
+                placeholder="Nickname"
+                onChange={(e) =>
+                  setSelectedContact({
+                    ...selectedContact,
+                    Nickname: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md mb-3"
+              />
+               <input
+                type="text"
+                value={selectedContact.Address}
+                placeholder="Address"
+                onChange={(e) =>
+                  setSelectedContact({
+                    ...selectedContact,
+                    Address: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md mb-3"
+              />
+                 <input
+                type="text"
+                value={selectedContact.Notes}
+                placeholder="Notes"
+                onChange={(e) =>
+                  setSelectedContact({
+                    ...selectedContact,
+                    Notes: e.target.value,
+                  })
+                }
+                className="w-full p-2 border rounded-md mb-3"
+              />
               <button
                 type="submit"
-                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                className="bg-blue-500 text-black px-4 py-2 rounded-md"
               >
                 Save
               </button>
@@ -125,6 +199,7 @@ const UserContacts = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
