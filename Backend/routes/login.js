@@ -30,8 +30,10 @@ router.post('/',async (req,res)=>{
             { expiresIn: '25d' }  
           );
         //   console.log(token)
+        const uType=loginUser['role']
+        // console.log(uType)
 
-        return res.status(200).cookie("token",token).json({success:true,message: "Login sucesfully", token:token})
+        return res.status(200).cookie("token",token).json({success:true,message: "Login sucesfully", token:token,user:loginUser})
 
     }
     catch(error){

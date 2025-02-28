@@ -50,9 +50,9 @@ router.get('/',async(req,res)=>{
   //retrive user
 router.get('/:id',async(req,res)=>{
   try{
-    // const {userID}=req.params.id
-    const {userID}=req.id
-    console.log(userID)
+    const userID=req.params.id
+    // const {userID}=req.id
+    console.log(req.params.id)
     const contacts=await contact.find({owner:userID})
     if(!contact){
       return res.json({success:false, message:"No contacts for this user"})

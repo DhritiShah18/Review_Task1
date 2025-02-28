@@ -5,15 +5,13 @@ const userRoute = require("./routes/userRouter")
 const loginRoute=require("./routes/login")
 const contactRoute=require('./routes/contactRoute')
 const teamRoute=require("./routes/teamRoute")
+const permissionRoute=require("./routes/permissionRoute")
 const cors=require("cors")
 
 const app=express()
 
-
 app.use(cors());
 app.use(express.json());
-// app.use(cors());
-
 
 //routes
 app.use("/users", userRoute);
@@ -21,6 +19,7 @@ app.use("/signup", userRoute);
 app.use("/login",loginRoute);
 app.use("/Contact",contactRoute);
 app.use("/teams",teamRoute)
+app.use("/permissions",permissionRoute)
 
 //Database conection
 dotenv.config();

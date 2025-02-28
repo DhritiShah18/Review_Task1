@@ -12,7 +12,7 @@ const teamSchema=mongoose.Schema({
     },
     Permissions:[{
         type:[String],
-        default:null,
+        // default:null,
         required:true
     }]
 },{timestamps: true})
